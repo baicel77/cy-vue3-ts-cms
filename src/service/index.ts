@@ -1,7 +1,7 @@
 import CYRequest from './request'
-import { BASE_URL1, TIME_OUT1, BASE_URL2, TIME_OUT2 } from './config'
+import { BASE_URL1, TIME_OUT1 } from './config'
 
-const cyRequest1 = new CYRequest({
+const cyRequest = new CYRequest({
   baseURL: BASE_URL1,
   timeout: TIME_OUT1,
   interceptors: {
@@ -19,10 +19,7 @@ const cyRequest1 = new CYRequest({
     }
   }
 })
-export const cyRequest2 = new CYRequest({
-  baseURL: BASE_URL2,
-  timeout: TIME_OUT2
-})
 
 
-export default cyRequest1
+
+export default cyRequest
