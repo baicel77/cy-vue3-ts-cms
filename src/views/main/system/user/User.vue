@@ -1,15 +1,13 @@
 <template>
-  <div class="app">
-    <router-view></router-view>
+  <div class="user">
+    <h3>user</h3>
   </div>
 </template>
 
 <script setup lang="ts">
+
 </script>
 
 <style lang="less" scoped>
-.app {
-  height: 100vh;
-  width: 100vw;
-}
+
 </style>

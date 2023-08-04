@@ -1,15 +1,13 @@
 <template>
-  <div class="app">
-    <router-view></router-view>
+  <div class="department">
+    <h3>department</h3>
   </div>
 </template>
 
 <script setup lang="ts">
+
 </script>
 
 <style lang="less" scoped>
-.app {
-  height: 100vh;
-  width: 100vw;
-}
+
 </style>

@@ -43,14 +43,19 @@ import { ref } from 'vue'
 
 import PanelAccount from './PanelAccount.vue'
 import PanelPhone from './PanelPhone.vue'
+import { localCache } from '@/utils/cache';
+import { watch } from 'vue';
 
-const isKeepPassword = ref(false)
+const isKeepPassword = ref(localCache.getCache('isKeepPassword') ?? false)
 const activeName = ref('account')
 const accountRef = ref<InstanceType<typeof PanelAccount>>()
+watch(isKeepPassword, (value) => {
+  localCache.setCache('isKeepPassword', value)
+})
 
 const handleLoginAction = () => {
   if (activeName.value === 'account') {
-    accountRef.value?.handleAccountLogin()
+    accountRef.value?.handleAccountLogin(isKeepPassword.value)
   } else {
     console.log('手机登录')
   }

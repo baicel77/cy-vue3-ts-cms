@@ -23,11 +23,12 @@ import { ref, reactive } from 'vue'
 import { ElMessage, type ElForm } from 'element-plus'
 import type { IAccount } from '@/type/login'
 import useLoginStore from '@/store/login/login'
+import { localCache } from '@/utils/cache';
 const loginStore = useLoginStore()
 
 const accountForm = reactive<IAccount>({
-  name: '',
-  password: ''
+  name: localCache.getCache('name') ?? '',
+  password: localCache.getCache('password') ?? ''
 })
 
 const rules = {
@@ -42,10 +43,15 @@ const rules = {
 }
 
 const formRef = ref<InstanceType<typeof ElForm>>()
-const handleAccountLogin = () => {
+const handleAccountLogin = (isKeepPassword: boolean) => {
   formRef.value?.validate((valid) => {
     if (valid) {
-      loginStore.handleLoginAction({ ...accountForm })
+      loginStore.handleLoginAction({ ...accountForm }).then(() => {
+        if (isKeepPassword) {
+          localCache.setCache('name', accountForm.name)
+          localCache.setCache('password', accountForm.password)
+        }
+      })
     } else {
       ElMessage.error('表单验证失败, 请填写正确的表单项!')
     }
