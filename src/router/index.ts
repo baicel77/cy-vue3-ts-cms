@@ -1,12 +1,14 @@
 import { localCache } from '@/utils/cache'
 import { createRouter, createWebHashHistory } from 'vue-router'
 import { TOKEN } from '@/global'
+import { firstMenu } from '@/utils/map-menu'
+
 const router = createRouter({
   history: createWebHashHistory(),
   routes: [
     {
       path: '/',
-      redirect: '/login'
+      redirect: '/main'
     },
     {
       path: '/login',
@@ -14,29 +16,9 @@ const router = createRouter({
     },
     {
       path: '/main',
+      name: 'main',
       component: () => import('@/views/main/Main.vue'),
-      children: [
-        {
-          path: '/main',
-          redirect: '/main/analysis/overview'
-        },
-        {
-          path: '/main/analysis/overview',
-          component: () => import('@/views/main/analysis/overview/Overview.vue')
-        },
-        {
-          path: '/main/analysis/dashboard',
-          component: () => import('@/views/main/analysis/dashboard/Dashboard.vue')
-        },
-        {
-          path: '/main/system/user',
-          component: () => import('@/views/main/system/user/User.vue')
-        },
-        {
-          path: '/main/system/department',
-          component: () => import('@/views/main/system/department/Department.vue')
-        }
-      ]
+      children: []
     },
     {
       path: '/:pathMatch(.*)*',
@@ -50,6 +32,9 @@ router.beforeEach((to) => {
   const token = localCache.getCache(TOKEN)
   if (to.path.startsWith('/main') && !token) {
     return '/login'
+  }
+  if (to.path === '/main') {
+    return firstMenu
   }
 })
 

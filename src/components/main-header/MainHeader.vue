@@ -4,7 +4,7 @@
       <el-icon size="28px" @click="handleHeaderIconClick">
         <component :is="isFold ? 'expand' : 'fold'"></component>
       </el-icon>
-      <div class="breadcrumb">面包屑</div>
+      <header-crumb />
     </div>
     <div class="header-right">
       <div class="icon">
@@ -12,53 +12,19 @@
         <el-icon class="icon-chat" size="20px"><ChatLineRound /></el-icon>
         <el-icon size="20px"><Search /></el-icon>
       </div>
-      <el-dropdown>
-        <div class="userInfo">
-          <el-avatar
-            :size="30"
-            src="https://upload.jianshu.io/users/upload_avatars/1102036/c3628b478f06.jpeg"
-          />
-          <div class="name">coderwhy</div>
-        </div>
-        <template #dropdown>
-          <el-dropdown-menu class="userInfo-menu">
-            <el-dropdown-item @click="handleExitLogin">
-              <el-icon><CircleClose /></el-icon>
-              <span class="text">退出系统</span>
-            </el-dropdown-item>
-            <el-dropdown-item divided>
-              <el-icon><InfoFilled /></el-icon>
-              <span class="text">个人信息</span>
-            </el-dropdown-item>
-            <el-dropdown-item>
-              <el-icon><Unlock /></el-icon>
-              <span class="text">修改密码</span>
-            </el-dropdown-item>
-          </el-dropdown-menu>
-        </template>
-      </el-dropdown>
+      <!-- 用户信息 -->
+      <header-user />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { TOKEN } from '@/global';
-import { localCache } from '@/utils/cache';
-import { useRouter } from 'vue-router';
+import HeaderUser from './c-cpns/HeaderUser.vue';
+import HeaderCrumb from './c-cpns/HeaderCrumb.vue';
 
-const router = useRouter()
 const emit = defineEmits(['changeFoldStatus'])
 
-const handleExitLogin = () => {
-  localCache.removeCache(TOKEN)
-  const isKeepPassword = localCache.getCache('isKeepPassword')
-  if (!isKeepPassword) {
-    localCache.removeCache('name')
-    localCache.removeCache('password')
-  }
-  router.push('/login')
-}
 const isFold = ref(false)
 const handleHeaderIconClick = () => {
   isFold.value = !isFold.value
@@ -77,10 +43,8 @@ const handleHeaderIconClick = () => {
     display: flex;
     align-items: center;
     .el-icon {
+      margin-right: 15px;
       cursor: pointer;
-    }
-    .breadcrumb {
-      margin-left: 15px;
     }
   }
   .header-right {
@@ -111,23 +75,9 @@ const handleHeaderIconClick = () => {
         }
       }
     }
-    .userInfo {
-      display: flex;
-      align-items: center;
-      margin-left: 25px;
-      cursor: pointer;
-      outline: none;
-      .name {
-        margin-left: 5px;
-        font-size: 14px;
-      }
-    }
   }
 }
 </style>
 <style>
-.userInfo-menu .el-dropdown-menu__item {
-  line-height: 36px;
-  padding: 6px 22px;
-}
+
 </style>

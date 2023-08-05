@@ -7,7 +7,7 @@
     <el-menu
       active-text-color="#fff"
       background-color="#001529"
-      default-active="39"
+      :default-active="activeIndex"
       text-color="#b7bdc3"
       :collapse="isCollapse"
       :collapse-transition="true"
@@ -30,8 +30,10 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
 import useLoginStore from '@/store/login/login'
-import { useRouter } from 'vue-router';
+import { mapRouteToMenuId } from '@/utils/map-menu'
 
 defineProps({
   isCollapse: {
@@ -43,9 +45,13 @@ defineProps({
 const loginStore = useLoginStore()
 
 const router = useRouter()
-const handleMenuItemClick = (item :any) => {
+const handleMenuItemClick = (item: any) => {
   router.push(item.url)
 }
+
+const route = useRoute()
+const activeIndex = computed(() => mapRouteToMenuId(route.path, loginStore.menuInfo))
+
 </script>
 
 <style lang="less" scoped>

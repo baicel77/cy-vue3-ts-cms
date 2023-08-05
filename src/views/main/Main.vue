@@ -33,7 +33,7 @@ const changeFoldStatus = (collapseStatus: boolean) => {
   .main-container {
     height: 100%;
     .el-aside {
-      transition: width 0.25s ease-in-out;
+      transition: width 0.2s linear;
     }
     .content-container {
       .el-main {
