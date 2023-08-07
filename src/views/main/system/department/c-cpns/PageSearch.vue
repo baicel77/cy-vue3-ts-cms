@@ -1,34 +1,21 @@
 <template>
-  <div class="user-search">
-    <el-form :model="userForm" label-width="80px" size="large" ref="formRef">
+  <div class="page-search">
+    <el-form :model="pageForm" label-width="80px" size="large" ref="formRef">
       <el-row :gutter="20">
         <el-col :span="8">
-          <el-form-item label="用户名" prop="name">
-            <el-input v-model="userForm.name" placeholder="请输入用户名" />
+          <el-form-item label="部门名称" prop="name">
+            <el-input v-model="pageForm.name" placeholder="请输入查询的部门名称" />
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="真实姓名" prop="realname">
-            <el-input v-model="userForm.realname" placeholder="请输入真实姓名" />
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="手机号码" prop="cellphone">
-            <el-input v-model="userForm.cellphone" placeholder="请输入手机号码" />
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="状态" prop="enable">
-            <el-select v-model="userForm.enable" placeholder="请选择状态" style="width: 100%">
-              <el-option label="启用" :value="1" />
-              <el-option label="禁用" :value="0" />
-            </el-select>
+          <el-form-item label="部门领导" prop="leader">
+            <el-input v-model="pageForm.leader" placeholder="请输入查询的领导名称" />
           </el-form-item>
         </el-col>
         <el-col :span="8">
           <el-form-item label="创建时间" prop="createAt">
             <el-date-picker
-              v-model="userForm.createAt"
+              v-model="pageForm.createAt"
               type="daterange"
               range-separator="到"
               start-placeholder="开始日期"
@@ -51,34 +38,24 @@ import type { ElForm } from 'element-plus'
 
 const emit = defineEmits(['queryClick', 'resetClick'])
 
-interface IUserForm {
-  name: string
-  realname: string
-  cellphone: string
-  enable: number
-  createAt: any
-}
-
-const userForm = reactive<IUserForm>({
+const pageForm = reactive({
   name: '',
-  realname: '',
-  cellphone: '',
-  enable: 1,
+  leader: '',
   createAt: ''
 })
 
 const formRef = ref<InstanceType<typeof ElForm>>()
 const handleFormReset = () => {
   formRef.value?.resetFields()
-  emit('resetClick', userForm)
+  emit('resetClick', pageForm)
 }
 const handleFormQuery = () => {
-  emit('queryClick', userForm)
+  emit('queryClick', pageForm)
 }
 </script>
 
 <style lang="less" scoped>
-.user-search {
+.page-search {
   background-color: #fff;
   padding: 20px;
   .el-form-item {

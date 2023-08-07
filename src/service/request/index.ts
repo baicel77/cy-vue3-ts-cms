@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from 'axios'
 import type { AxiosInstance } from 'axios'
 import type { ICYRequestConfig } from './type'
 /**
@@ -17,16 +17,22 @@ class CYRequest {
   constructor(config: ICYRequestConfig) {
     this.instance = axios.create(config)
     // 全局的拦截器
-    this.instance.interceptors.request.use((config) => {
-      return config
-    }, err => {
-      return err
-    })
-    this.instance.interceptors.response.use(res => {
-      return res.data
-    }, err => {
-      return err
-    })
+    this.instance.interceptors.request.use(
+      (config) => {
+        return config
+      },
+      (err) => {
+        return err
+      }
+    )
+    this.instance.interceptors.response.use(
+      (res) => {
+        return res.data
+      },
+      (err) => {
+        return err
+      }
+    )
 
     // 每个实例自己的拦截器
     this.instance.interceptors.request.use(
@@ -44,34 +50,35 @@ class CYRequest {
       config = config.interceptors.successRequetInterceptors(config)
     }
     return new Promise<T>((resolve, reject) => {
-      this.instance.request<any, T>(config).then(res => {
-        if (config.interceptors?.successResponseInterceptors) {
-          res = config.interceptors.successResponseInterceptors(res)
-        }
-        resolve(res)
-      }).catch(err => {
-        reject(err)
-      })
+      this.instance
+        .request<any, T>(config)
+        .then((res) => {
+          if (config.interceptors?.successResponseInterceptors) {
+            res = config.interceptors.successResponseInterceptors(res)
+          }
+          resolve(res)
+        })
+        .catch((err) => {
+          reject(err)
+        })
     })
   }
 
   get<T = any>(config: ICYRequestConfig<T>) {
-    return this.request<T>({...config, method: 'GET'})
+    return this.request<T>({ ...config, method: 'GET' })
   }
 
   post<T = any>(config: ICYRequestConfig<T>) {
-    return this.request<T>({...config, method: 'POST'})
+    return this.request<T>({ ...config, method: 'POST' })
   }
 
   delete<T = any>(config: ICYRequestConfig<T>) {
-    return this.request<T>({...config, method: 'DETELE'})
+    return this.request<T>({ ...config, method: 'DELETE' })
   }
 
   patch<T = any>(config: ICYRequestConfig<T>) {
-    return this.request<T>({...config, method: 'PATCH'})
+    return this.request<T>({ ...config, method: 'PATCH' })
   }
-
 }
-
 
 export default CYRequest

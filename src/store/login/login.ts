@@ -5,7 +5,8 @@ import { localCache } from '@/utils/cache'
 import router from '@/router'
 import { TOKEN } from '@/global'
 import type { IUserInfoData, IMenuInfoData } from '@/service/login/type'
-import { mapMenuToRoutes} from '@/utils/map-menu'
+import { mapMenuToRoutes } from '@/utils/map-menu'
+import useMainStore from '../main/main'
 interface ILoginState {
   token: string
   userInfo: IUserInfoData
@@ -38,19 +39,26 @@ const useLoginStore = defineStore('login', {
       this.menuInfo = menuRes.data
       localCache.setCache('menuInfo', menuRes.data)
 
-      // 4.动态注册路由
-      // 4.1根据获取到的菜单映射相应的路由对象
+      // 4.获取完整角色和部门数据
+      const mainStore = useMainStore()
+      mainStore.handleGetEntireMainAction()
+
+      // 5.动态注册路由
+      // 5.1根据获取到的菜单映射相应的路由对象
       const finalRoutes = mapMenuToRoutes(menuRes.data)
-      // 4.2动态添加路由
-      finalRoutes.forEach(item => {
+      // 5.2动态添加路由
+      finalRoutes.forEach((item) => {
         router.addRoute('main', item)
       })
 
-      // 5.跳转到main页面
+      // 6.跳转到main页面
       router.push('/main')
     },
     // 重新刷新页面, 动态注册的路由对象就不存在了, 需要重新获取
-    handleRefreshACtion() {
+    handleRefreshAction() {
+      // 0.获取完整角色和部门数据
+      const mainStore = useMainStore()
+      mainStore.handleGetEntireMainAction()
       // 1.根据获取到的菜单映射相应的路由对象
       const finalRoutes = mapMenuToRoutes(this.menuInfo)
       // 2动态添加路由

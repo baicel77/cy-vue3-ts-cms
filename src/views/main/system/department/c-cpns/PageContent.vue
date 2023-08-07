@@ -1,23 +1,16 @@
 <template>
-  <div class="user-content">
+  <div class="page-content">
     <div class="content-title">
-      <h3 class="title">用户列表</h3>
-      <el-button type="primary" @click="handleAddClick">新建用户</el-button>
+      <h3 class="title">部门列表</h3>
+      <el-button type="primary" @click="handleAddClick">新建部门</el-button>
     </div>
     <div class="content-list">
-      <el-table :data="userList" border style="width: 100%">
+      <el-table :data="pageList" border style="width: 100%">
         <el-table-column type="selection" align="center" width="50" />
         <el-table-column type="index" align="center" label="序号" width="60" />
-        <el-table-column prop="name" align="center" label="用户名" width="150" />
-        <el-table-column prop="realname" align="center" label="真实姓名" width="150" />
-        <el-table-column prop="cellphone" align="center" label="手机号码" width="150" />
-        <el-table-column prop="enable" align="center" label="状态" width="100">
-          <template #default="scope">
-            <el-button type="primary" size="small" plain>
-              {{ scope.row.enable === 1 ? '启用' : '禁用' }}
-            </el-button>
-          </template>
-        </el-table-column>
+        <el-table-column prop="name" align="center" label="部门名称" width="150" />
+        <el-table-column prop="leader" align="center" label="部门领导" width="150" />
+        <el-table-column prop="parentId" align="center" label="上级部门" width="150" />
         <el-table-column prop="createAt" align="center" label="创建时间">
           <template #default="scope">
             {{ formatTime(scope.row.createAt) }}
@@ -42,7 +35,7 @@
         v-model:page-size="pageSize"
         :page-sizes="[10, 15, 20]"
         layout="sizes, prev, pager, next, jumper, total"
-        :total="totalCount"
+        :total="pageTotalCount"
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
       />
@@ -53,32 +46,32 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { storeToRefs } from 'pinia'
-import { useUserStore } from '@/store/main/system/system'
+import usePageStore from '@/store/main/system/system'
 import { formatTime } from '@/utils/format'
 
 const emit = defineEmits(['addClick', 'editClick'])
 
 // 1. 发起action
-const userStore = useUserStore()
+const pageStore = usePageStore()
 const currentPage = ref(1)
 const pageSize = ref(10)
-fetchUserList()
+fetchPageList()
 
 // 2.获取数据
-const { userList, totalCount } = storeToRefs(userStore)
+const { pageList, pageTotalCount } = storeToRefs(pageStore)
 
 // 3.pagenation
 const handleSizeChange = () => {
-  fetchUserList()
+  fetchPageList()
 }
 const handleCurrentChange = () => {
-  fetchUserList()
+  fetchPageList()
 }
 
-function fetchUserList(formData: any = {}) {
+function fetchPageList(formData: any = {}) {
   const offset = (currentPage.value - 1) * pageSize.value
   const size = pageSize.value
-  userStore.handleGetUseristAction({
+  pageStore.handleGetPageData('department', {
     offset,
     size,
     ...formData
@@ -86,7 +79,7 @@ function fetchUserList(formData: any = {}) {
 }
 
 const handleDeleteClick = (id: number) => {
-  userStore.handleDeleteUserById(id)
+  pageStore.handleDeletePageDataById('department', id)
 }
 
 const handleAddClick = () => {
@@ -97,11 +90,11 @@ const handleUpdateClick = (itemData: any) => {
   emit('editClick', itemData)
 }
 
-defineExpose({ fetchUserList })
+defineExpose({ fetchPageList })
 </script>
 
 <style lang="less" scoped>
-.user-content {
+.page-content {
   background-color: #fff;
   margin-top: 20px;
   padding: 20px;
