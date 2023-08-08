@@ -1,39 +1,61 @@
 <template>
   <div class="page">
-    <page-search @query-click="handleQueryClick" @reset-click="handleResetClick" :searchConfig="searchConfig" />
-    <page-content ref="PageContentRef" @add-click="handleAddClick" @edit-click="handleUpdateClick" />
-    <page-modal ref="pageModalRef" />
+    <page-search
+      @query-click="handleQueryClick"
+      @reset-click="handleResetClick"
+      :searchConfig="searchConfig"
+    />
+    <page-content
+      ref="PageContentRef"
+      @add-click="handleAddClick"
+      @edit-click="handleUpdateClick"
+      :contentConfig="contentConfig"
+    >
+    </page-content>
+    <page-modal ref="pageModalRef" :modalConfig="newModalConfig" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-import PageSearch from '@/components/page-search/PageSearch.vue'
+import { computed } from 'vue'
 
-import PageContent from './c-cpns/PageContent.vue'
-import PageModal from './c-cpns/PageModal.vue';
+import PageSearch from '@/components/page-search/PageSearch.vue'
+import PageContent from '@/components/page-content/PageContent.vue'
+import PageModal from '@/components/page-modal/PageModal.vue'
 
 import searchConfig from './config/search.config'
+import contentConfig from './config/content.config'
+import modalConfig from './config/modal.config'
 
-const PageContentRef = ref<InstanceType<typeof PageContent>>()
-const handleQueryClick = (userForm: any) => {
-  PageContentRef.value?.fetchPageList(userForm)
-}
-const handleResetClick = () => {
-  PageContentRef.value?.fetchPageList()
-}
+import usePageContent from '@/hooks/usePageContent'
+import usePageModal from '@/hooks/usePageModal'
 
+import { storeToRefs } from 'pinia'
+import useMainStore from '@/store/main/main'
+const mainStore = useMainStore()
+const { entireDepartmentList } = storeToRefs(mainStore)
 
-const pageModalRef = ref<InstanceType<typeof PageModal>>()
-const handleAddClick = () => {
-  pageModalRef.value?.changeDialogVisible()
-}
-const handleUpdateClick = (itemData: any) => {
-  pageModalRef.value?.changeDialogVisible(true, itemData)
-}
+const newModalConfig = computed(() => {
+  const option = entireDepartmentList.value.map((item) => {
+    return {
+      label: item.name,
+      value: item.id
+    }
+  })
+  modalConfig.formItems.forEach((item: any) => {
+    if (item.prop === 'parentId') {
+      item['option'] = option
+    }
+  })
+  return modalConfig
+})
+
+// content hooks
+const { PageContentRef, handleQueryClick, handleResetClick } = usePageContent()
+
+// modal hooks
+const { pageModalRef, handleAddClick, handleUpdateClick } = usePageModal()
 
 </script>
 
-<style lang="less" scoped>
-
-</style>
+<style lang="less" scoped></style>

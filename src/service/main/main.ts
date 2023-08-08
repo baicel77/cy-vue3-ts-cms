@@ -11,3 +11,9 @@ export function getEntireDepartmentList() {
   })
 }
 
+export function getEntireMenuList() {
+  return cyRequest.post({
+    url: '/menu/list'
+  })
+}
+

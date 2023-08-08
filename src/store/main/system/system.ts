@@ -11,6 +11,7 @@ import type { IUserListData } from '@/service/main/system/type'
 interface IPageState {
   userList: IUserListData[]
   totalCount: number
+
   pageList: IUserListData[]
   pageTotalCount: number
 }

@@ -74,3 +74,19 @@ export function mapRouteToCrumb(routePath: string, userMenu: IMenuInfoData) {
   })
   return crumb
 }
+
+// 根据当前角色菜单数据映射对应的菜单id
+export function mapMenuToIds(menuList: any) {
+  const ids: any[] = []
+  function getIds(menuList: any) {
+    menuList.forEach((item: any) => {
+      if (item.children) {
+        getIds(item.children)
+      } else {
+        ids.push(item.id)
+      }
+    })
+  }
+  getIds(menuList)
+  return ids
+}
