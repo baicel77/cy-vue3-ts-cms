@@ -7,17 +7,20 @@ import { TOKEN } from '@/global'
 import type { IUserInfoData, IMenuInfoData } from '@/service/login/type'
 import { mapMenuToRoutes } from '@/utils/map-menu'
 import useMainStore from '../main/main'
+import { mapMenuListToPermission } from '@/utils/map-menu'
 interface ILoginState {
   token: string
   userInfo: IUserInfoData
   menuInfo: IMenuInfoData
+  permission: string[]
 }
 
 const useLoginStore = defineStore('login', {
   state: (): ILoginState => ({
     token: localCache.getCache(TOKEN) ?? '',
     userInfo: localCache.getCache('userInfo') ?? {},
-    menuInfo: localCache.getCache('menuInfo') ?? []
+    menuInfo: localCache.getCache('menuInfo') ?? [],
+    permission: localCache.getCache('permission') ?? []
   }),
   actions: {
     async handleLoginAction(account: IAccount) {
@@ -38,6 +41,10 @@ const useLoginStore = defineStore('login', {
       // 3.1保存信息
       this.menuInfo = menuRes.data
       localCache.setCache('menuInfo', menuRes.data)
+      // 3.2获取用户的按钮权限
+      const permission = mapMenuListToPermission(menuRes.data)
+      this.permission = permission
+      localCache.setCache('permission', permission)
 
       // 4.获取完整角色和部门数据
       const mainStore = useMainStore()

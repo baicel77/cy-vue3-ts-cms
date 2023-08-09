@@ -6,7 +6,7 @@ export const TIME_OUT2 = 8000
 
 // 区分开发环境和生产环境
 // 1.手动
-let envrioment = ''
+// let envrioment = ''
 // const BASE_URL = 'production'
 
 /*
@@ -15,9 +15,9 @@ let envrioment = ''
 */
 
 if (import.meta.env.MODE === 'development') {
-  envrioment = 'development'
+  // envrioment = 'development'
 } else {
-  envrioment = 'production'
+  // envrioment = 'production'
 }
 
 // 3.根据dotenv文件 .env .env.[mode] VITE_

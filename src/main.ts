@@ -23,6 +23,9 @@ import { registerIcon } from '@/global'
   3.2.在vite配置文件中进行相应的配置
 */
 // import 'element-plus/theme-chalk/el-message.css'
+const aaa = '111'
+
+
 const app = createApp(App)
 app.use(store)
 app.use(router)

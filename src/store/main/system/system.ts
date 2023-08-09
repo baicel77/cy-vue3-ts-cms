@@ -7,6 +7,7 @@ import {
   editPageData
 } from '@/service/main/system/system'
 import type { IUserListData } from '@/service/main/system/type'
+import useMainStore from '../main'
 
 interface IPageState {
   userList: IUserListData[]
@@ -14,6 +15,8 @@ interface IPageState {
 
   pageList: IUserListData[]
   pageTotalCount: number
+  currentPage: number
+  pageSize: number
 }
 const useUserStore = defineStore('system', {
   state: (): IPageState => ({
@@ -21,7 +24,9 @@ const useUserStore = defineStore('system', {
     totalCount: 0,
 
     pageList: [],
-    pageTotalCount: 0
+    pageTotalCount: 0,
+    currentPage: 1,
+    pageSize: 10
   }),
   actions: {
     async handleGetUseristAction(data: any) {
@@ -59,6 +64,7 @@ const useUserStore = defineStore('system', {
     },
     async handleDeletePageDataById(pageName: string, id: number) {
       await deletePageDataById(pageName, id)
+      this.currentPage = 1
       this.handleGetPageData(pageName, {
         offset: 0,
         size: 10
@@ -66,13 +72,18 @@ const useUserStore = defineStore('system', {
     },
     async handleAddPageData(pageName: string, data: any) {
       await addPageData(pageName, data)
+      this.currentPage = 1
       this.handleGetPageData(pageName, {
         offset: 0,
         size: 10
       })
+      //重新获取完整角色和部门数据
+      const mainStore = useMainStore()
+      mainStore.handleGetEntireMainAction()
     },
     async handleEditPageData(pageName: string, id: number, data: any) {
       await editPageData(pageName, id, data)
+      this.currentPage = 1
       this.handleGetPageData(pageName, {
         offset: 0,
         size: 10

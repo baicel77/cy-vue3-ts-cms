@@ -1,4 +1,4 @@
-import type { AxiosRequestConfig, AxiosResponse, InternalAxiosRequestConfig } from 'axios'
+import type { AxiosRequestConfig, AxiosResponse } from 'axios'
 
 export interface ICYInterceptors<T> {
   successRequetInterceptors?: (config: AxiosRequestConfig) => AxiosRequestConfig

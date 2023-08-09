@@ -90,3 +90,20 @@ export function mapMenuToIds(menuList: any) {
   getIds(menuList)
   return ids
 }
+
+// 根据菜单获取用户按钮权限数据
+export function mapMenuListToPermission(menuList: any) {
+  const permission: string[] = []
+  console.log('menuList', menuList)
+  function recurseGetPermission(menuList: any) {
+    menuList.forEach((item: any) => {
+      if (item.type === 3) {
+        permission.push(item.permission)
+      } else {
+        recurseGetPermission(item.children ?? [])
+      }
+    })
+  }
+  recurseGetPermission(menuList)
+  return permission
+}
