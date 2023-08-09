@@ -24,7 +24,10 @@ const option = computed<EChartsOption>(() => {
       // 视觉映射组件
       left: '25',
       bottom: '40',
-      seriesIndex: [0],
+      seriesIndex: [1],
+      min: 0,
+      max: 70000,
+      calculable: true,
       inRange: {
         color: ['rgb(70, 240, 252)', 'rgb(250, 220, 46)', 'rgb(245, 38, 186)']
       }
@@ -37,7 +40,7 @@ const option = computed<EChartsOption>(() => {
       label: { show: false },
       aspectScale: 0.75, // 缩放地图
     },
-    color: ['rgb(70, 240, 252)', 'rgb(250, 220, 46)', 'rgb(245, 38, 186)'],
+    color: ['red', 'pink', 'green'],
     series: [
       {
         name: '中国地图',
