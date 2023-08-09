@@ -25,6 +25,9 @@ import { registerIcon } from '@/global'
 // import 'element-plus/theme-chalk/el-message.css'
 const aaa = '111'
 
+const aaa = '222'
+console.log(bbb)
+
 
 const app = createApp(App)
 app.use(store)
