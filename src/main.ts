@@ -23,8 +23,8 @@ import { registerIcon } from '@/global'
   3.2.在vite配置文件中进行相应的配置
 */
 // import 'element-plus/theme-chalk/el-message.css'
-console.log(bbb.xxx())
-
+let ccc = 'ccc'
+console.log(ccc)
 
 const app = createApp(App)
 app.use(store)
